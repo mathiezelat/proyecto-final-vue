@@ -1,3 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.button {
+    @apply w-full border rounded p-2;
+}
+
+.agregar {
+    @apply bg-green-500;
+}
+
+.agregado {
+    @apply bg-blue-500;
+}
+
+.actualizar {
+    @apply bg-yellow-500;
+}
+
+.eliminar {
+    @apply bg-red-500;
+}

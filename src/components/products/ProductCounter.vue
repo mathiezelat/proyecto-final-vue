@@ -1,10 +1,14 @@
 <template>
-  <div class="flex justify-center">
-    <button class="px-2" @click="restar">-</button>
-    <div class="px-2">
+  <div class="flex my-2">
+    <button class="px-2 py-1 border-2 border-black bg-black hover:bg-white text-white hover:text-black transition-colors" @click="restar">
+      <font-awesome-icon icon="fa-solid fa-minus" size="lg" />
+    </button>
+    <div class="px-3 py-1 font-bold border-y-2 border-black">
       {{ counter }}
     </div>
-    <button class="px-2" @click="sumar">+</button>
+    <button class="px-2 py-1 border-2 border-black bg-black hover:bg-white text-white hover:text-black transition-colors" @click="sumar">
+      <font-awesome-icon icon="fa-solid fa-plus" size="lg" />
+    </button>
   </div>
 </template>
 
@@ -14,12 +18,15 @@ export default {
   props: {
     productStock: {
       type: Number,
-      require: true,
+      required: true,
     },
+    quantity: {
+      type: Number
+    }
   },
   data() {
     return {
-      counter: 1,
+      counter: this.quantity,
       buttonColor: "agregar",
       buttonText: "Agregar al carrito",
     };
@@ -56,10 +63,7 @@ export default {
           buttonText: this.buttonText,
         });
       }
-    },
+    }
   },
 };
 </script>
-
-<style>
-</style>

@@ -1,49 +1,61 @@
-<template>
-  <div>
-    <vue-final-modal
-      name="cartModal"
-      v-slot="{ close }"
-      v-bind="$attrs"
-      classes="flex justify-center items-center"
-      content-class="relative flex flex-col p-10 max-h-full mx-4 p-4 border border-gray-300 shadow rounded bg-white"
-      v-on="$listeners"
-    >
-      <div class="flex-grow overflow-y-auto">
-        <CartTable v-if="cart.length > 0" :cart="cart" />
-        <p v-else>No hay productos en el carrito</p>
+p<template>
+  <modal
+    name="cart-modal"
+    :adaptive="true"
+    :min-width="200"
+    :min-height="200"
+    :scrollable="true"
+    :reset="true"
+    width="60%"
+    height="auto"
+  >
+    <div class="flex flex-col p-2">
+      <div class="flex justify-end pb-2">
+        <button class="border rounded py-1 px-3" @click="hide">
+          <font-awesome-icon icon="fa-solid fa-xmark" size="xl" />
+        </button>
       </div>
-      <button
-        class="absolute top-0 right-0 mt-2 mr-2 px-2 border rounded"
-        @click="close"
-      >
-        x
-      </button>
-    </vue-final-modal>
-  </div>
+      <div class="flex flex-col" v-if="cart.length > 0">
+        <CartTable :cart="cart" />
+        <button 
+          class="border rounded py-2 px-4"
+          v-if="cart.length > 0 && user" 
+          @click="confirmOrder"
+        >
+          Confirmar Compra
+        </button>
+      </div>
+      <p class="text-xl text-center pb-9" v-else>
+        No hay productos en el carrito
+      </p>
+    </div>
+  </modal>
 </template>
 
 <script>
-import { $vfm, VueFinalModal } from "vue-final-modal";
 import CartTable from "@/components/cart/CartTable.vue";
 
 export default {
   name: "CustomModal",
   components: {
-    VueFinalModal,
     CartTable,
   },
   props: {
     cart: {
       type: Array,
+      required: true,
+    },
+    user: {
+      type: Object,
     },
   },
   methods: {
-    close() {
-      $vfm.hide("cartModal");
+    hide() {
+      this.$modal.hide("cart-modal");
     },
+    confirmOrder() {
+      this.$emit("confirm-order")
+    }
   },
 };
 </script>
-
-<style>
-</style>
