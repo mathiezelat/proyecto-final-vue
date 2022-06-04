@@ -15,11 +15,11 @@ p<template>
           <font-awesome-icon icon="fa-solid fa-xmark" size="xl" />
         </button>
       </div>
-      <div class="flex flex-col" v-if="cart.length > 0">
-        <CartTable :cart="cart" />
+      <div class="flex flex-col" v-if="getCart.length > 0">
+        <CartTable :cart="getCart" />
         <button 
           class="border rounded py-2 px-4"
-          v-if="cart.length > 0 && user" 
+          v-if="getCart.length > 0 && getUser" 
           @click="confirmOrder"
         >
           Confirmar Compra
@@ -33,6 +33,8 @@ p<template>
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
+import api from '@/services/api.services.js'
 import CartTable from "@/components/cart/CartTable.vue";
 
 export default {
@@ -40,22 +42,33 @@ export default {
   components: {
     CartTable,
   },
-  props: {
-    cart: {
-      type: Array,
-      required: true,
-    },
-    user: {
-      type: Object,
-    },
-  },
   methods: {
+    ...mapActions("cart", ["emptyCart"]),
+    ...mapActions("orders", ["addOrder"]),
     hide() {
       this.$modal.hide("cart-modal");
     },
-    confirmOrder() {
-      this.$emit("confirm-order")
+    async confirmOrder() {
+      const total = this.getCart.reduce((acc, product) => acc + product.total, 0)
+
+      const newOrder = {
+        products: this.getCart,
+        total
+      }
+
+      await api.saveOrder(this.getUser.id, newOrder)
+
+      this.addOrder(newOrder)
+
+      this.emptyCart()
+
+      this.$modal.hide("cart-modal")
     }
   },
+  computed: {
+    ...mapGetters("user", ["getUser"]),
+    ...mapGetters("cart", ["getCart"]),
+    ...mapGetters("products", ["getProducts"]),
+  }
 };
 </script>

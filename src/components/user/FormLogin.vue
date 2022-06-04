@@ -76,6 +76,7 @@
 
 <script>
 import { required, minLength, email } from "vuelidate/lib/validators";
+import { mapActions } from 'vuex';
 import api from "@/services/api.services.js";
 
 export default {
@@ -103,6 +104,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions("user", ["loginUser"]),
     resetForm() {
       Object.keys(this.form).forEach((key) => (this.form[key] = ""));
     },
@@ -114,7 +116,7 @@ export default {
       } else {
         const user = await api.loginUser(this.form.email, this.form.password);
         if(user) {
-          this.$emit("user-login", user)
+          this.loginUser(user)
           this.errorSubmit = false
           this.$v.$reset()
           this.resetForm()

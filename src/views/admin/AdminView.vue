@@ -72,24 +72,26 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import api from "@/services/api.services.js"
 
 export default {
     name: "AdminView",
-    props: {
-      user: {
-        type: Object
-      }
-    },
     data() {
       return {
         products: []
       }
     },
+    created() {
+      this.setProducts()
+    },
+    computed: {
+      ...mapGetters("user", ["getUser"]),
+    },
     methods: {
-      async getProducts() {
-        if(this.user?.isAdmin) {
-          this.products = await api.getProducts()
+      async setProducts() {
+        if(this.getUser?.isAdmin) {
+            this.products = await api.getProducts()
         } else {
           this.$router.push("/login")
         }
@@ -99,8 +101,5 @@ export default {
         this.products = this.products.filter(product => product.id !== productId)
       }
     },
-    mounted() {
-      this.getProducts()
-    }
 }
 </script>

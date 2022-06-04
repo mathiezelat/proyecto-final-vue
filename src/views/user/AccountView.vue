@@ -1,7 +1,7 @@
 <template>
   <div class="max-w-7xl mx-auto px-4 py-4">
-    <div v-if="user">
-      <h1 class="text-4xl">¡Bienvenido, {{ user.email }}!</h1>
+    <div v-if="getUser">
+      <h1 class="text-4xl">¡Bienvenido, {{ getUser.email }}!</h1>
       <div v-if="orders.length > 0" class="py-5">
         <p class="text-2xl font-bold pb-2">Pedidos</p>
         <div class="flex flex-col-reverse justify-center gap-5">
@@ -47,31 +47,36 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import api from "@/services/api.services.js";
 
 export default {
   name: "AccountView",
-  props: {
-    user: {
-      type: Object,
-    },
-  },
   data() {
     return {
       orders: [],
     };
   },
+  created() {
+    this.setOrders();
+  },
   methods: {
-    async getOrders() {
-      if(this.user) {
-        this.orders = await api.getOrders(this.user.id)
+    async setOrders() {
+      if(this.getUser) {
+        if(this.getOrders.length > 0) {
+          this.orders = this.getOrders
+        } else {
+          this.orders = await api.getOrders(this.getUser.id)
+        }
       } else {
         this.$router.push("login")
       }
     },
   },
-  mounted() {
-    this.getOrders();
-  },
+  computed: {
+    ...mapGetters("user", ["getUser"]),
+    ...mapGetters("orders", ["getOrders"])
+  }
+
 };
 </script>

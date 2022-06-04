@@ -2,42 +2,27 @@
   <div class="home">
     <div class="flex flex-wrap justify-center gap-2">
       <ProductCard
-        v-for="product in products"
+        v-for="product in getProducts"
         :key="product.id"
         :product="product"
-        :cart="cart"
-        @add-to-cart="addToCart"
+        :cart="getCart"
       />
     </div>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
+import { mapGetters } from "vuex"
 import ProductCard from "@/components/products/ProductCard.vue";
 
 export default {
   name: "HomeView",
-  props: {
-    products: {
-      type: Array,
-      required: true
-    },
-    cart: {
-      type: Array,
-      required: true
-    }
-  },
   components: {
     ProductCard,
   },
-  methods: {
-    addToCart({productId, counter}) {
-      this.$emit("add-to-cart", {
-        productId,
-        counter,
-      });
-    },
+  computed: {
+    ...mapGetters("products", ["getProducts"]),
+    ...mapGetters("cart", ["getCart"])
   }
 };
 </script>

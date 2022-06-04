@@ -1,29 +1,29 @@
 <template>
-  <div class="relative bg-emerald-500">
+  <div class="relative bg-emerald-500 mb-5">
     <nav class="max-w-7xl mx-auto px-4 py-4">
       <div class="flex justify-between">
       <router-link to="/" class="text-2xl text-white">
-        Vue Desserts CH MEL
+        Vue Eats
       </router-link>
       <div class="flex gap-2">
         <router-link 
           to="/login"
           class="rounded py-2 px-4 bg-blue-500 text-white"
-          v-if="!user"
+          v-if="!getUser"
         >
           LOGIN
         </router-link>
         <router-link 
-          :to="user.isAdmin ? '/admin' : '/account'"
+          :to="getUser.isAdmin ? '/admin' : '/account'"
           class="rounded py-2 px-4 bg-blue-500 text-white"
-          v-if="user"
+          v-if="getUser"
         >
-          {{ user.isAdmin ? 'Admin': 'Mi Cuenta' }}
+          {{ getUser.isAdmin ? 'Admin': 'Mi Cuenta' }}
         </router-link>
         <button 
           class="rounded py-2 px-4 bg-blue-500 text-white"
-          v-if="user"
-          @click="userLogout"
+          v-if="getUser"
+          @click="logoutUser"
         >
           Logout
         </button>
@@ -38,14 +38,14 @@
     </nav>
     <CartModal 
       v-model="showModal" 
-      :user="user" 
-      :cart="cart" 
+      :user="getUser"
       @confirm-order="confirmOrder" 
     />
   </div>
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex';
 import CartModal from "@/components/cart/CartModal.vue";
 
 export default {
@@ -53,34 +53,25 @@ export default {
   components: {
     CartModal,
   },
-  props: {
-    user: {
-      type: Object,
-    },
-    cart: {
-      type: Array,
-      required: true,
-    },
-  },
   data() {
     return {
       showModal: false,
     };
   },
   methods: {
+    ...mapActions("user", ["logoutUser"]),
     openModal() {
       this.$modal.show('cart-modal')
-    },
-    userLogout() {
-      this.$emit("user-logout")
     },
     confirmOrder() {
       this.$emit("confirm-order")
     }
   },
   computed: {
+    ...mapGetters("cart",["getCart"]),
+    ...mapGetters("user",["getUser"]),
     cartCounter() {
-      return this.cart.reduce((acc, product) => acc + product.quantity, 0);
+      return this.getCart.reduce((acc, product) => acc + product.quantity, 0);
     },
   },
 };

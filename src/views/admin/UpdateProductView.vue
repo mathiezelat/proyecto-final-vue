@@ -95,16 +95,12 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import { required, url, numeric } from "vuelidate/lib/validators";
 import api from "@/services/api.services.js";
 
 export default {
   name: "UpdateProductView",
-  props: {
-    user: {
-      type: Object
-    }
-  },
   data() {
     return {
       id: this.$route.params.id,
@@ -115,6 +111,8 @@ export default {
         stock: "",
         img: "",
       },
+      errorSubmit: false,
+      errorMessage: ""
     };
   },
   validations: {
@@ -139,7 +137,11 @@ export default {
       }
     },
   },
+  created() {
+    this.getProduct()
+  },
   computed: {
+    ...mapGetters("user", ["getUser"]),
     buttonMessage: {
       get() {
         return this.id !== "agregar"
@@ -152,7 +154,8 @@ export default {
       async submitForm() {
         this.$v.$touch();
         if (this.$v.$invalid) {
-            console.log('Formulario inválido')
+          this.errorSubmit = true
+          this.errorMessage = "Campos inválidos"
         } else {
             const form = {
                 name: this.form.name,
@@ -166,33 +169,30 @@ export default {
             } else {
                 await api.updateProduct(this.id, form)
             }
+            this.errorSubmit = false
             this.$router.push('/admin')
-            console.log('Formulario válido')
         }
       },
       async getProduct() {
-        if(this.user?.isAdmin) {
+        if(this.getUser?.isAdmin) {
             if(this.id !== 'agregar') {
               const product = await api.getProduct(this.id)
-            if(product) {
-              this.form = {
-                name: product.name,
-                detail: product.detail,
-                price: product.price,
-                stock: product.stock,
-                img: product.img,
+              if(product) {
+                this.form = {
+                  name: product.name,
+                  detail: product.detail,
+                  price: product.price,
+                  stock: product.stock,
+                  img: product.img,
+                }
+              } else {
+                this.$router.push("/admin")
               }
-            } else {
-              this.$router.push("/admin")
-            }
           }
         } else {
           this.$router.push("/login")
         }
       }
   },
-  mounted() {
-    this.getProduct()
-  }
 };
 </script>

@@ -50,7 +50,10 @@
         </p>
         <p>$ {{ product.price }}</p>
       </div>
-      <button class="button text-white" :class="buttonColor" @click="addToCart">
+      <button class="button text-white" 
+        :class="buttonColor" 
+        @click="updateToCart()"
+      >
         {{ buttonText }}
       </button>
     </div>
@@ -58,16 +61,14 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex"
+
 export default {
   name: "ProductCard",
   props: {
     product: {
       type: Object,
       required: true,
-    },
-    cart: {
-      type: Array,
-      required: true
     }
   },
   data() {
@@ -80,45 +81,47 @@ export default {
     };
   },
   mounted() {
-    this.isProductInCart()
+    this.getInCart()
   },
   methods: {
-    addToCart() {
+    ...mapActions("cart", ["addToCart", "deleteToCart"]),
+    updateToCart() {
       if (this.counter > 0) {
         this.changeButton = true;
-        this.buttonText = "Eliminar";
-        this.buttonColor = "eliminar";
+        this.buttonText = "Eliminar"
+        this.buttonColor = "eliminar"
       } else {
-        this.changeButton = false;
-        this.buttonText = "Agregar al carrito";
-        this.buttonColor = "agregar";
+        this.changeButton = false
+        this.buttonText = "Agregar al carrito"
+        this.buttonColor = "agregar"
       }
       if(!this.isInCart) {
         this.isInCart = true
-        this.$emit("add-to-cart", {
-          productId: this.product.id,
+        this.addToCart({
+          product: this.product,
           counter: this.counter,
-        });
+        })
       } else {
         this.changeButton = false;
         this.buttonText = "Agregar al carrito"
         this.buttonColor = "agregar"
         this.isInCart = false
-        this.$emit("add-to-cart", {
-          productId: this.product.id,
-          counter: 0,
-        });
+        this.deleteToCart(this.product)
       }
     },
-    isProductInCart() {
-      const product = this.cart.find(product => product.id === this.product.id)
-      if(product !== undefined) {
+    getInCart() {
+      const product = this.getInCartById(this.product.id)
+      if(product) {
+        this.counter = product.quantity
+        this.changeButton = true
+        this.buttonText = "Eliminar"
+        this.buttonColor = "eliminar"
         this.isInCart = true
-        this.changeButton = true;
-        this.buttonText = "Eliminar";
-        this.buttonColor = "eliminar";
       }
     }
   },
+  computed: {
+    ...mapGetters("cart", ["getInCartById"])
+  }
 };
 </script>
