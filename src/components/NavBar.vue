@@ -23,7 +23,7 @@
         <button 
           class="rounded py-2 px-4 bg-blue-500 text-white"
           v-if="getUser"
-          @click="logoutUser"
+          @click="handlerLogoutUser"
         >
           Logout
         </button>
@@ -60,6 +60,11 @@ export default {
   },
   methods: {
     ...mapActions("user", ["logoutUser"]),
+    handlerLogoutUser(){
+      this.logoutUser()
+      const path = this.$router.currentRoute.path
+      if(path !== "/") this.$router.push("/")
+    },
     openModal() {
       this.$modal.show('cart-modal')
     },
