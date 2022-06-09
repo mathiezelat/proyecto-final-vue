@@ -7,6 +7,7 @@
           <th class="border border-slate-300">Cantidad</th>
           <th class="border border-slate-300">Precio</th>
           <th class="border border-slate-300">Subtotal</th>
+          <th class="border border-slate-300">Borrar</th>
         </tr>
       </thead>
       <tbody>
@@ -15,13 +16,26 @@
             {{ product.name }}
           </td>
           <td class="border border-slate-300 p-2 text-center">
-            {{ product.quantity }}
+            <button class="px-1 bg-black rounded text-white disabled:opacity-0" @click="subtractFromCart(product)" :disabled="product.quantity <= 1">
+              <font-awesome-icon icon="fa-solid fa-minus" />
+            </button>
+            <span>
+              {{ product.quantity }}
+            </span>
+            <button class="px-1 bg-black rounded text-white disabled:opacity-0" @click="sumToCart(product)" :disabled="product.quantity >= product.stock">
+              <font-awesome-icon icon="fa-solid fa-plus" />
+            </button>
           </td>
           <td class="border border-slate-300 p-2 text-center">
             $ {{ product.price }}
           </td>
           <td class="border border-slate-300 p-2 text-center">
             $ {{ product.total }}
+          </td>
+          <td class="border border-slate-300 p-2 text-center">
+            <button @click="deleteToCart(product)">
+              <font-awesome-icon icon="fa-solid fa-trash" />
+            </button>
           </td>
         </tr>
       </tbody>
@@ -33,6 +47,8 @@
 </template>
 
 <script>
+import { mapActions } from "vuex"
+
 export default {
   name: "CartTable",
   props: {
@@ -40,6 +56,25 @@ export default {
       type: Array,
       required: true,
     },
+  },
+  methods: {
+    ...mapActions("cart", ["addToCart", "deleteToCart"]),
+    sumToCart(product) {
+      if(product.quantity < product.stock) {
+        this.addToCart({
+          product,
+          counter: ++product.quantity,
+        })
+      }
+    },
+    subtractFromCart(product) {
+      if(product.quantity > 1) {
+        this.addToCart({
+          product,
+          counter: --product.quantity,
+        })
+      }
+    }
   },
   computed: {
     cartTotal() {

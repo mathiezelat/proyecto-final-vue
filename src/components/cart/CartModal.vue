@@ -24,6 +24,14 @@ p<template>
         >
           Confirmar Compra
         </button>
+        <button 
+          class="border rounded py-2 px-4"
+          v-if="!getUser" 
+          @click="toLogin"
+        >
+          Iniciar sesión
+        </button>
+
       </div>
       <p class="text-xl text-center pb-9" v-else>
         No hay productos en el carrito
@@ -46,7 +54,12 @@ export default {
     ...mapActions("cart", ["emptyCart"]),
     ...mapActions("orders", ["addOrder"]),
     hide() {
-      this.$modal.hide("cart-modal");
+      this.$modal.hide("cart-modal")
+    },
+    toLogin() {
+      const path = this.$router.currentRoute.path
+      if(path !== "/login") this.$router.push("/login")
+      this.hide()
     },
     async confirmOrder() {
       const total = this.getCart.reduce((acc, product) => acc + product.total, 0)

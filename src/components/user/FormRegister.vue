@@ -2,6 +2,30 @@
   <form class="max-w-xl mx-auto" @submit.prevent="submitForm">
     <div class="grid grid-cols-1 gap-1 items-start relative">
       <div class="grid grid-cols-1 gap-1 pb-5 relative">
+        <label class="text-lg" for="name">Nombre</label>
+        <input
+          type="text" 
+          class="
+            rounded-md 
+            border-gray-300 
+            shadow-sm
+            transition
+            focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50
+          "
+          :class="{'border-red-300 focus:border-red-500 focus:ring-red-200 focus:ring-opacity-50': $v.form.name.$error }"
+          id="name"
+          v-model.trim="$v.form.name.$model" 
+        />
+        <div class="text-xs font-bold text-red-600 absolute bottom-0" v-if="$v.form.name.$dirty">
+          <p v-if="!$v.form.name.required">
+            Nombre es requerido
+          </p>
+          <p v-if="!$v.form.name.alpha">
+            Nombre es inválido
+          </p>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 gap-1 pb-5 relative">
         <label class="text-lg" for="email">Correo electrónico</label>
         <input
           type="email" 
@@ -51,6 +75,29 @@
           </p>
         </div>
       </div>
+      <div class="grid grid-cols-1 gap-1 pb-5 relative">
+        <label class="text-lg" for="confirmPassword">
+          Confirmar contraseña
+        </label>
+        <input
+          type="password"
+          class="
+            rounded-md 
+            border-gray-300 
+            shadow-sm
+            transition
+            focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50
+          "
+          :class="{'border-red-300 focus:border-red-500 focus:ring-red-200 focus:ring-opacity-50': $v.form.confirmPassword.$error }"
+          id="confirmPassword"
+          v-model.trim="$v.form.confirmPassword.$model"
+        />
+        <div class="text-xs font-bold text-red-600 absolute bottom-0" v-if="$v.form.confirmPassword.$dirty">
+          <p v-if="!$v.form.confirmPassword.sameAsPassword">
+            Confimar contraseña debe ser idéntica a la contraseña
+          </p>
+        </div>
+      </div>
       <div class="justify-self-center">
         <button type="submit" class="
           py-2
@@ -75,7 +122,7 @@
 </template>
 
 <script>
-import { required, minLength, email } from "vuelidate/lib/validators";
+import { required, minLength, email, alpha, sameAs } from "vuelidate/lib/validators";
 import api from "@/services/api.services.js";
 
 export default {
@@ -83,8 +130,10 @@ export default {
   data() {
     return {
       form: {
+        name: "",
         email: "",
         password: "",
+        confirmPassword: null,
       },
       errorSubmit: false,
       errorMessage: ""
@@ -92,14 +141,21 @@ export default {
   },
   validations: {
     form: {
+      name: {
+        required,
+        alpha
+      },
       email: {
         required,
         email,
       },
       password: {
         required,
-        minLength: minLength(8),
+        minLength: minLength(7),
       },
+      confirmPassword: {
+        sameAsPassword: sameAs('password')
+      }
     },
   },
   methods: {
@@ -118,7 +174,7 @@ export default {
           this.errorMessage = "Ya existe un usuario con ese correo electrónico"
         } else {
           this.errorSubmit = false
-          await api.createUser(this.form.email, this.form.password)
+          await api.createUser(this.form.name, this.form.email, this.form.password)
           this.$v.$reset()
           this.resetForm()
           this.$router.push("/login")

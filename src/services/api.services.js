@@ -37,9 +37,9 @@ const api = {
             console.error(error)
         }
     },
-    createUser: async (email, password) => {
+    createUser: async (name, email, password) => {
         try {
-            const { data } = await axios.post(`${apiUrl}/users`, {email, password})
+            const { data } = await axios.post(`${apiUrl}/users`, {name, email, password})
             return data
         } catch (error) {
             console.error(error)

@@ -1,7 +1,7 @@
 <template>
   <div class="max-w-7xl mx-auto px-4 py-4">
     <div v-if="getUser">
-      <h1 class="text-4xl">¡Bienvenido, {{ getUser.email }}!</h1>
+      <h1 class="text-4xl">¡Bienvenido, {{ getUser.name }}!</h1>
       <div v-if="orders.length > 0" class="py-5">
         <p class="text-2xl font-bold pb-2">Pedidos</p>
         <div class="flex flex-col-reverse justify-center gap-5">
