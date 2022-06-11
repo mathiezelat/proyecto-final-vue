@@ -4,7 +4,19 @@
       <div class="grid grid-cols-1 gap-1 items-start relative">
         <div class="grid grid-cols-1 gap-1 pb-5 relative">
           <label class="text-lg" for="name"> Nombre del producto </label>
-          <input type="text" id="name" v-model.trim="$v.form.name.$model" />
+          <input 
+            class="
+              rounded-md 
+              border-gray-300 
+              shadow-sm
+              transition
+              focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50
+            "
+            :class="{'border-red-300 focus:border-red-500 focus:ring-red-200 focus:ring-opacity-50': $v.form.name.$error }"
+            type="text" 
+            id="name" 
+            v-model.trim="$v.form.name.$model" 
+          />
           <div 
             class="text-xs font-bold text-red-600 absolute bottom-0" 
             v-if="$v.form.name.$dirty"
@@ -18,7 +30,19 @@
           <label class="text-lg" for="detail"> 
             Detalles del producto 
           </label>
-          <input type="text" id="detail" v-model.trim="$v.form.detail.$model" />
+          <input
+            class="
+              rounded-md 
+              border-gray-300 
+              shadow-sm
+              transition
+              focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50
+            "
+            :class="{'border-red-300 focus:border-red-500 focus:ring-red-200 focus:ring-opacity-50': $v.form.detail.$error }"
+            type="text" 
+            id="detail" 
+            v-model.trim="$v.form.detail.$model" 
+          />
           <div 
             class="text-xs font-bold text-red-600 absolute bottom-0" 
             v-if="$v.form.detail.$dirty"
@@ -32,7 +56,19 @@
           <label class="text-lg" for="price">
               Precio del producto 
           </label>
-          <input type="number" id="price"  v-model.number="$v.form.price.$model" />
+          <input 
+            class="
+              rounded-md 
+              border-gray-300 
+              shadow-sm
+              transition
+              focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50
+            "
+            :class="{'border-red-300 focus:border-red-500 focus:ring-red-200 focus:ring-opacity-50': $v.form.price.$error }"
+            type="number" 
+            id="price"  
+            v-model.number="$v.form.price.$model" 
+          />
           <div 
             class="text-xs font-bold text-red-600 absolute bottom-0" 
             v-if="$v.form.price.$dirty"
@@ -46,7 +82,19 @@
           <label class="text-lg" for="stock">
               Stock del producto 
           </label>
-          <input type="number" id="stock" v-model.number="$v.form.stock.$model" />
+          <input 
+            class="
+              rounded-md 
+              border-gray-300 
+              shadow-sm
+              transition
+              focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50
+            "
+            :class="{'border-red-300 focus:border-red-500 focus:ring-red-200 focus:ring-opacity-50': $v.form.stock.$error }"
+            type="number" 
+            id="stock" 
+            v-model.number="$v.form.stock.$model" 
+          />
           <div 
             class="text-xs font-bold text-red-600 absolute bottom-0" 
             v-if="$v.form.stock.$dirty"
@@ -60,7 +108,19 @@
           <label class="text-lg" for="img" >
             URL de la imagen del producto
           </label>
-          <input type="text" id="img" v-model.trim="$v.form.img.$model" />
+          <input 
+            class="
+              rounded-md 
+              border-gray-300 
+              shadow-sm
+              transition
+              focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50
+            "
+            :class="{'border-red-300 focus:border-red-500 focus:ring-red-200 focus:ring-opacity-50': $v.form.img.$error }"
+            type="text" 
+            id="img" 
+            v-model.trim="$v.form.img.$model" 
+          />
           <div 
             class="text-xs font-bold text-red-600 absolute bottom-0" 
             v-if="$v.form.img.$dirty"

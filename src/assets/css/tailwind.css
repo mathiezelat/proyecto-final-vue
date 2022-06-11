@@ -2,22 +2,33 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+    font-family: 'Montserrat';
+    src: url('../fonts/Montserrat-VariableFont_wght.ttf'); 
+}
+
+@layer base {
+    * {
+        font-family: Montserrat, Helvetica, Arial, sans-serif;
+    }
+}
+
 .button {
     @apply w-full border rounded p-2;
 }
 
 .agregar {
-    @apply bg-green-500;
+    @apply bg-green-500 hover:bg-green-600 disabled:hover:bg-green-500;
 }
 
 .agregado {
-    @apply bg-blue-500;
+    @apply bg-blue-500 hover:bg-blue-600 disabled:hover:bg-blue-500;
 }
 
 .actualizar {
-    @apply bg-yellow-500;
+    @apply bg-yellow-500 hover:bg-yellow-600 disabled:hover:bg-yellow-500;
 }
 
 .eliminar {
-    @apply bg-red-500;
+    @apply bg-red-500 hover:bg-red-600 disabled:hover:bg-red-500;
 }

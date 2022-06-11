@@ -1,12 +1,20 @@
 <template>
   <div class="flex my-2">
-    <button class="px-2 py-1 border-2 border-black bg-black hover:bg-white text-white hover:text-black transition-colors" @click="restar">
+    <button 
+      class="px-2 py-1 border-2 border-black bg-black hover:bg-white text-white hover:text-black transition-colors disabled:opacity-75 disabled:hover:bg-black disabled:hover:text-white" 
+      @click="restar"
+      :disabled="productStock < 1"
+    >
       <font-awesome-icon icon="fa-solid fa-minus" size="lg" />
     </button>
     <div class="px-3 py-1 font-bold border-y-2 border-black">
       {{ counter }}
     </div>
-    <button class="px-2 py-1 border-2 border-black bg-black hover:bg-white text-white hover:text-black transition-colors" @click="sumar">
+    <button 
+      class="px-2 py-1 border-2 border-black bg-black hover:bg-white text-white hover:text-black transition-colors disabled:opacity-75 disabled:hover:bg-black disabled:hover:text-white" 
+      @click="sumar"
+      :disabled="productStock < 1"
+    >
       <font-awesome-icon icon="fa-solid fa-plus" size="lg" />
     </button>
   </div>

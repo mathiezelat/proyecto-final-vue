@@ -31,28 +31,38 @@
           h-full
           w-full
           inset-0
-          invisible
-          group-hover:visible
+          opacity-0
+          group-hover:opacity-100
           bg-black/0
-          hover:bg-black/20
+          hover:bg-black/50
           transition
         "
       >
-        <button class="bg-white rounded py-2 px-4 font-semibold border">
+        <button class="
+          rounded 
+          py-2 
+          px-4 
+          font-semibold
+          text-white
+        "
+        >
           Ver producto
         </button>
       </router-link>
     </div>
     <div class="flex flex-col w-full justify-between gap-2 p-2">
-      <div class="font-semibold">
-        <p class="text-lg">
+      <div>
+        <p class="text-lg font-semibold">
           {{ product.name }}
         </p>
-        <p>$ {{ product.price }}</p>
+        <p class="font-medium">
+          $ {{ product.price }}
+        </p>
       </div>
-      <button class="button text-white" 
+      <button class="button text-white font-bold disabled:opacity-75" 
         :class="buttonColor" 
         @click="updateToCart()"
+        :disabled="product.stock < 1"
       >
         {{ buttonText }}
       </button>
@@ -86,16 +96,10 @@ export default {
   methods: {
     ...mapActions("cart", ["addToCart", "deleteToCart"]),
     updateToCart() {
-      if (this.counter > 0) {
+      if(!this.isInCart) {
         this.changeButton = true;
         this.buttonText = "Eliminar"
         this.buttonColor = "eliminar"
-      } else {
-        this.changeButton = false
-        this.buttonText = "Agregar al carrito"
-        this.buttonColor = "agregar"
-      }
-      if(!this.isInCart) {
         this.isInCart = true
         this.addToCart({
           product: this.product,
@@ -117,6 +121,11 @@ export default {
         this.buttonText = "Eliminar"
         this.buttonColor = "eliminar"
         this.isInCart = true
+      } else {
+        this.changeButton = false;
+        this.buttonText = "Agregar al carrito"
+        this.buttonColor = "agregar"
+        this.isInCart = false
       }
     }
   },

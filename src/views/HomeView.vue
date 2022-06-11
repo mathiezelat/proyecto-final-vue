@@ -1,6 +1,6 @@
 <template>
-  <div class="home">
-    <div class="flex flex-wrap justify-center gap-2">
+  <div class="max-w-7xl mx-auto px-4 py-4">
+    <div class="flex flex-wrap gap-2">
       <ProductCard
         v-for="product in getProducts"
         :key="product.id"

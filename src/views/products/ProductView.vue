@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-7xl border rounded mx-auto px-4 py-4">
+  <div class="max-w-7xl mx-auto px-4 py-4">
     <div v-if="product" class="grid grid-cols-1 md:grid-cols-2 gap-5 h-full w-full">
       <img
         class="object-cover h-full w-full rounded"
@@ -7,11 +7,13 @@
         :alt="product.name"
       />
       <div class="flex flex-col h-full w-full justify-center">
-        <div class="font-semibold">
-          <h1 class="text-4xl">
+        <div>
+          <h1 class="font-bold text-4xl">
             {{ product.name }}
           </h1>
-          <p class="text-2xl">$ {{ product.price }}</p>
+          <p class="font-semibold text-2xl">
+            $ {{ product.price }}
+          </p>
           <p class="text-lg font-normal">
             {{ product.detail }}
           </p>
@@ -21,19 +23,26 @@
           :quantity="counter"
           @emit-counter="updateCounter"
         />
+        <p class="font-semibold" v-if="product.stock < 1">
+          Sin Stock
+        </p>
         <button
           class="
             py-2
             px-4
-            font-semibold
+            font-bold
             border-2 border-black
             bg-black
             hover:bg-white
             text-white
             hover:text-black
             transition-colors
+            disabled:opacity-75
+            disabled:hover:bg-black
+            disabled:hover:text-white
           "
           @click="updateCart({product, counter})"
+          :disabled="product.stock < 1"
         >
           {{ buttonText }}
         </button>
@@ -82,21 +91,22 @@ export default {
       }
     },
     updateCart() {
-      if (this.counter > 0) {
-        this.changeButton = true;
-        this.buttonText = "Agregado"
-        this.buttonColor = "agregado"
-        this.addToCart({
-          product: this.product,
-          counter: this.counter,
-        })
-      } else {
-        this.changeButton = false;
-        this.buttonText = "Agregar al carrito"
-        this.buttonColor = "agregar"
-        this.deleteToCart(this.product)
+      if(this.product.stock > 0) {
+        if (this.counter > 0) {
+          this.changeButton = true;
+          this.buttonText = "Agregado"
+          this.buttonColor = "agregado"
+          this.addToCart({
+            product: this.product,
+            counter: this.counter,
+          })
+        } else {
+          this.changeButton = false;
+          this.buttonText = "Agregar al carrito"
+          this.buttonColor = "agregar"
+          this.deleteToCart(this.product)
+        }
       }
-
     },
     getInCart() {
       const product = this.getInCartById(this.id)

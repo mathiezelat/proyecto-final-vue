@@ -5,7 +5,7 @@
       <div v-if="orders.length > 0" class="py-5">
         <p class="text-2xl font-bold pb-2">Pedidos</p>
         <div class="flex flex-col-reverse justify-center gap-5">
-          <div class="border-y py-2" v-for="order in orders" :key="order.id">
+          <div class="border p-2 rounded bg-green-50" v-for="order in orders" :key="order.id">
             <p class="text-xl font-semibold">Fecha {{ Date(order.createdAt) }}</p>
             <table
               class="table-fixed border-collapse w-full border border-slate-500"
@@ -35,7 +35,9 @@
                 </tr>
               </tbody>
             </table>
-            <p class="text-xl">Total: $ {{ order.total }}</p>
+            <p class="text-xl">
+              Total: $ {{ order.total }}
+            </p>
           </div>
         </div>
       </div>
