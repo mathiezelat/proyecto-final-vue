@@ -2,6 +2,7 @@
 Página **e-commerce** de comida simple y fácil de utilizar para los usuarios. 
 
 ## Inicializar el proyecto 👨‍💻
+- Crear el archivo .env y añadir la variable de entorno de _VUE_APP_API_URL=_ con la API del servidor back-end
 - Configurar e instalar lo necesario para el proyecto: _npm install_
 - Compilar y inicializar el proyecto para desarrollo: _npm run serve_
 - Compilar y manificar el proyecto para producción: _npm run build_
