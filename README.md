@@ -8,7 +8,7 @@ Página **e-commerce** de comida simple y fácil de utilizar para los usuarios.
 - Compilar y manificar el proyecto para producción: _npm run build_
 
 ## Visita la página 💡
-- Click [Acá]() para visitar la _página_.
+- Click [Acá](https://vue-eats.netlify.app/) para visitar la _página_.
 
 ## Vista previa de la página 🎬
 ![Preview Vue Eats](vue-eats-preview.gif)
