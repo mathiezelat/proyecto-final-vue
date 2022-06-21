@@ -2,24 +2,33 @@
   <div id="app">
     <NavBar />
     <router-view />
+    <FooterComponent />
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex"
 import NavBar from "@/components/NavBar.vue"
+import FooterComponent from "@/components/FooterComponent.vue"
 
 export default {
   name: "App",
   components: {
     NavBar,
+    FooterComponent
+  },
+  metaInfo: {
+    title: 'Inicio',
+    titleTemplate: '%s | Vue Eats'
   },
   created() {
+    this.setCategories()
     this.setProducts()
     if(this.getUser) this.setOrders(this.getUser.id)
   },
   methods: {
     ...mapActions("products", ["setProducts"]),
+    ...mapActions("categories", ["setCategories"]),
     ...mapActions("orders", ["setOrders"]),
   },
   computed: {

@@ -45,6 +45,38 @@ const api = {
             console.error(error)
         }
     },
+    getCategories: async () => {
+        const { data } = await axios.get(`${apiUrl}/categories`)
+        return data
+    },
+    getCategory: async (categoryId) => {
+        const { data } = await axios.get(`${apiUrl}/categories/${categoryId}`)
+        return data
+    },
+    saveCategory: async (newCategory) => {
+        try {
+            const { data } = await axios.post(`${apiUrl}/categories`, newCategory)
+            return data
+        } catch (error) {
+            console.error(error)
+        }
+    },
+    updateCategory: async (categoryId, newCategory) => {
+        try {
+            const { data } = await axios.put(`${apiUrl}/categories/${categoryId}`, newCategory)
+            return data
+        } catch (error) {
+            console.error(error)
+        }
+    },
+    deleteCategory: async (categoryId) => {
+        try {
+            const { data } = await axios.delete(`${apiUrl}/categories/${categoryId}`)
+            return data
+        } catch (error) {
+            console.error(error)
+        }
+    },
     getProducts: async () => {
         try {
             const { data } = await axios.get(`${apiUrl}/products`)

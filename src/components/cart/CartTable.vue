@@ -1,48 +1,53 @@
 <template>
-  <div class="container mx-auto flex flex-col items-center justify-center">
-    <table class="table-fixed border-collapse w-full border border-slate-500">
-      <thead>
-        <tr>
-          <th class="border border-slate-300">Producto</th>
-          <th class="border border-slate-300">Cantidad</th>
-          <th class="border border-slate-300">Precio</th>
-          <th class="border border-slate-300">Subtotal</th>
-          <th class="border border-slate-300">Borrar</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="product in cart" :key="product.id">
-          <td class="border border-slate-300 p-2 text-center">
-            {{ product.name }}
-          </td>
-          <td class="border border-slate-300 p-2 text-center">
+  <div class="mx-auto w-full flex flex-col pb-2 items-center justify-center">
+    <div class="flex py-5 border-b w-full" v-for="product in cart" :key="product.id">
+      <div>
+        <img 
+          class="h-full sm:h-28 w-32 object-cover rounded"
+          :src="product.img" 
+          :alt="product.name"
+        >
+      </div>
+      <div class="flex justify-between flex-wrap w-full px-2">
+        <div class="flex flex-col items-start xs:w-2/5 sm:w-1/2">
+            <div class="flex gap-2">
+              <p class="text-lg font-semibold">
+                {{ product.name }}
+              </p>
+              <button class="" @click="deleteToCart(product)">
+                <font-awesome-icon icon="fa-solid fa-trash" />
+              </button>
+            </div>
+            <p class="text-sm opacity-85">
+              {{ product.category }}
+            </p>
+            <p class="text-sm opacity-80">
+              {{ product.detail }}
+            </p>
+        </div>
+        <div class="flex justify-start items-start gap-2">
             <button class="px-1 bg-black rounded text-white disabled:opacity-0" @click="subtractFromCart(product)" :disabled="product.quantity <= 1">
               <font-awesome-icon icon="fa-solid fa-minus" />
             </button>
-            <span>
+            <p>
               {{ product.quantity }}
-            </span>
+            </p>
             <button class="px-1 bg-black rounded text-white disabled:opacity-0" @click="sumToCart(product)" :disabled="product.quantity >= product.stock">
               <font-awesome-icon icon="fa-solid fa-plus" />
             </button>
-          </td>
-          <td class="border border-slate-300 p-2 text-center">
-            $ {{ product.price }}
-          </td>
-          <td class="border border-slate-300 p-2 text-center">
-            $ {{ product.total }}
-          </td>
-          <td class="border border-slate-300 p-2 text-center">
-            <button @click="deleteToCart(product)">
-              <font-awesome-icon icon="fa-solid fa-trash" />
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <p class="text-xl px-10 py-2">
-      Total: $ {{ cartTotal }}
-    </p>
+        </div>
+        <div class="flex items-start w-20">
+          <p class="font-medium">
+            ${{product.total}}
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="flex justify-end w-full">
+      <p class="text-xl px-10 py-2 font-bold">
+        Total $ {{ cartTotal }}
+      </p>
+    </div>
   </div>
 </template>
 

@@ -22,8 +22,16 @@ export default {
         setProducts: async (context) => {
             try {
                 let result = null
-                const data = await api.getProducts()
-                result = data
+
+                const [data, categories] = await Promise.all([
+                    api.getProducts(),
+                    api.getCategories()
+                ])
+
+                result = data.map((product) => {
+                    const { name } = categories.find(category => category.id === product.categoryId)
+                    return { category: name, ...product }
+                })
 
                 if(result !== null) {
                     context.commit('SET_PRODUCTS', result)

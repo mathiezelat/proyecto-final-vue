@@ -41,10 +41,33 @@ const routes = [
     props: true
   },
   {
-    path: '/update/:id',
-    name: 'update',
+    path: '/product/update/:id',
+    name: 'productUpdate',
     component: () => import('@/views/admin/UpdateProductView.vue'),
     props: true
+  },
+  {
+    path: '/category/update/:id',
+    name: 'categoryUpdate',
+    component: () => import('@/views/admin/UpdateCategoryView.vue'),
+    props: true
+  },
+  {
+    path: '/cart',
+    name: 'cart',
+    component: () => import('@/views/cart/CartView.vue'),
+    props: true
+  },
+  {
+    path: '/products',
+    name: 'products',
+    component: () => import('@/views/products/ProductsView.vue'),
+    props: true
+  },
+  {
+    path: '*',
+    name: 'notFound',
+    component: () => import('@/views/NotFound.vue'),
   }
 ]
 

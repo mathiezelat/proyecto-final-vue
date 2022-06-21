@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-2xl rounded shadow-sm mx-auto py-10 mt-10 border">
+  <div class="max-w-2xl rounded mx-auto py-10 mt-10 px-4">
     <form @submit.prevent="submitForm" class="max-w-xl mx-auto">
       <div class="grid grid-cols-1 gap-1 items-start relative">
         <div class="grid grid-cols-1 gap-1 pb-5 relative">
@@ -49,6 +49,40 @@
           >
             <p v-if="!$v.form.detail.required">
               Detalle del producto es requerido
+            </p>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 gap-1 pb-5 relative">
+          <label class="text-lg" for="category"> 
+            Categoria
+          </label>
+          <select
+            class="
+              rounded-md 
+              border-gray-300 
+              shadow-sm
+              transition
+              focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50
+              w-full
+              block
+            "
+            :class="{'border-red-300 focus:border-red-500 focus:ring-red-200 focus:ring-opacity-50': $v.form.categoryId.$error }"
+            id="category" 
+            v-model.trim="$v.form.categoryId.$model" 
+          >
+            <option 
+              v-for="category in categories" 
+              :key="category.id" 
+              :value="category.id">
+                {{ category.name }}
+              </option>
+          </select>
+          <div 
+            class="text-xs font-bold text-red-600 absolute bottom-0" 
+            v-if="$v.form.categoryId.$dirty"
+          >
+            <p v-if="!$v.form.categoryId.required">
+              Categoria del producto es requerido
             </p>
           </div>
         </div>
@@ -167,12 +201,14 @@ export default {
       form: {
         name: "",
         detail: "",
+        categoryId: "",
         price: "",
         stock: "",
         img: "",
       },
       errorSubmit: false,
-      errorMessage: ""
+      errorMessage: "",
+      categories: [],
     };
   },
   validations: {
@@ -182,6 +218,10 @@ export default {
       },
       detail: {
         required,
+      },
+      categoryId: {
+        required,
+        numeric
       },
       price: {
         required,
@@ -199,6 +239,7 @@ export default {
   },
   created() {
     this.getProduct()
+    this.getCategories()
   },
   computed: {
     ...mapGetters("user", ["getUser"]),
@@ -212,7 +253,7 @@ export default {
   },
   methods: {
       async submitForm() {
-        this.$v.$touch();
+        this.$v.$touch()
         if (this.$v.$invalid) {
           this.errorSubmit = true
           this.errorMessage = "Campos inválidos"
@@ -220,6 +261,7 @@ export default {
             const form = {
                 name: this.form.name,
                 detail: this.form.detail,
+                categoryId: this.form.categoryId,
                 price: Number(this.form.price),
                 stock: Number(this.form.stock),
                 img: this.form.img
@@ -241,6 +283,7 @@ export default {
                 this.form = {
                   name: product.name,
                   detail: product.detail,
+                  categoryId: product.categoryId,
                   price: product.price,
                   stock: product.stock,
                   img: product.img,
@@ -249,6 +292,13 @@ export default {
                 this.$router.push("/admin")
               }
           }
+        } else {
+          this.$router.push("/login")
+        }
+      },
+      async getCategories() {
+          if(this.getUser?.isAdmin) {
+            this.categories = await api.getCategories()
         } else {
           this.$router.push("/login")
         }

@@ -11,10 +11,13 @@
           <h1 class="font-bold text-4xl">
             {{ product.name }}
           </h1>
+          <p class="font-medium text-lg">
+            {{ product.category }}
+          </p>
           <p class="font-semibold text-2xl">
             $ {{ product.price }}
           </p>
-          <p class="text-lg font-normal">
+          <p class="text-lg font-base opacity-75">
             {{ product.detail }}
           </p>
         </div>
@@ -48,18 +51,28 @@
         </button>
       </div>
     </div>
+    <div class="text-xl text-center pb-9" v-if="!isExistingProduct">
+      <p>
+        La producto no existe
+      </p>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from "vuex"
-import api from "@/services/api.services.js";
-import ProductCounter from "@/components/products/ProductCounter.vue";
+import api from "@/services/api.services.js"
+import ProductCounter from "@/components/products/ProductCounter.vue"
 
 export default {
   name: "ProductView",
   components: {
     ProductCounter,
+  },
+  metaInfo() {
+    return {
+      title: this.title
+    }
   },
   data() {
     return {
@@ -68,11 +81,13 @@ export default {
       changeButton: false,
       buttonText: "Agregar al carrito",
       buttonColor: "agregar",
-      counter: 1
+      counter: 1,
+      title: '...',
+      isExistingProduct: true
     };
   },
-  created() {
-    this.getProduct()
+  async created() {
+    await this.getProduct()
     this.getInCart()
   },
   methods: {
@@ -80,7 +95,16 @@ export default {
     async getProduct() {
       this.product = this.getProductById(this.id)
       if(!this.product) {
-        this.product = await api.getProduct(this.id)
+        const product = await api.getProduct(this.id)
+        if(product) {
+          const { name } = await api.getCategory(product.categoryId)
+          this.product = { category: name, ...product }
+          this.title = this.product.name
+        } else {
+          this.isExistingProduct = false
+        }
+      } else {
+        this.title = this.product.name
       }
     },
     updateCounter({ counter, buttonText, buttonColor }) {

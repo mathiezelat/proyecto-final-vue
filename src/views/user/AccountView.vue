@@ -4,9 +4,9 @@
       <h1 class="text-4xl">¡Bienvenido, {{ getUser.name }}!</h1>
       <div v-if="orders.length > 0" class="py-5">
         <p class="text-2xl font-bold pb-2">Pedidos</p>
-        <div class="flex flex-col-reverse justify-center gap-5">
-          <div class="border p-2 rounded bg-green-50" v-for="order in orders" :key="order.id">
-            <p class="text-xl font-semibold">Fecha {{ Date(order.createdAt) }}</p>
+        <div class="flex flex-col-reverse justify-center">
+          <div class="border-t py-4" v-for="order in orders" :key="order.id">
+            <p class="text-xl font-semibold">Fecha {{ getDate(order.createdAt) }}</p>
             <table
               class="table-fixed border-collapse w-full border border-slate-500"
             >
@@ -36,7 +36,7 @@
               </tbody>
             </table>
             <p class="text-xl">
-              Total: $ {{ order.total }}
+              Total $ {{ order.total }}
             </p>
           </div>
         </div>
@@ -74,10 +74,14 @@ export default {
         this.$router.push("login")
       }
     },
+    getDate(date) {
+      if(!date) return new Date().toLocaleString()
+      return new Date(date).toLocaleString()
+    }
   },
   computed: {
     ...mapGetters("user", ["getUser"]),
-    ...mapGetters("orders", ["getOrders"])
+    ...mapGetters("orders", ["getOrders"]),
   }
 
 };

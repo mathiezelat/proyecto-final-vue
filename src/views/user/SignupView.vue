@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-2xl rounded shadow-sm mx-auto py-10 mt-10 border">
+  <div class="max-w-2xl rounded mx-auto py-10 px-4 mt-10">
     <FormRegister />
         <div class="pt-10">
         <p class="text-center">

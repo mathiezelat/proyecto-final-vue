@@ -3,8 +3,10 @@
     class="
       flex flex-col
       font-sans
-      h-96
-      w-60
+      h-68
+      lg:h-96
+      w-40
+      lg:w-60
       overflow-hidden
       drop-shadow
       rounded
@@ -59,7 +61,20 @@
           $ {{ product.price }}
         </p>
       </div>
-      <button class="button text-white font-bold disabled:opacity-75" 
+      <p 
+      class="text-sm font-medium"
+      v-if="product.stock < 1">
+        Sin Stock
+      </p>
+      <button 
+        class="
+          button 
+        text-white 
+          font-bold 
+          disabled:opacity-75
+          text-xs
+          lg:text-base
+        " 
         :class="buttonColor" 
         @click="updateToCart()"
         :disabled="product.stock < 1"
